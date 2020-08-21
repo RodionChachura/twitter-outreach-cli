@@ -1,0 +1,30 @@
+{
+  "name": "twitter-outreach-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "semi": false
+  },
+  "author": "geekrodion",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "readline-sync": "^1.4.10"
+  }
+}
