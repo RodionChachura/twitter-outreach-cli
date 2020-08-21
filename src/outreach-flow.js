@@ -10,6 +10,7 @@ module.exports = (screenName) => {
   // to: refactor
   const storage = new Storage(screenName)
   let state = storage.get()
+  const initialMessagedNumber = state.messaged.length
   const updateState = (newPart) => {
     state = { ...state, ...newPart }
     storage.update(state)
@@ -23,7 +24,11 @@ module.exports = (screenName) => {
         description,
         screenName,
         urls
-      }, restUsers] = state.users
+      }, ...restUsers] = state.users
+
+      const messagedNumber = state.messaged.length - initialMessagedNumber
+      console.clear()
+      messagedNumber && console.log(`+ ${messagedNumber} messaged`)
       console.log(name)
       description && console.log(description)
       console.log(helpers.getTwitterUrl(screenName))
@@ -31,6 +36,7 @@ module.exports = (screenName) => {
       urls.forEach(url => {
         console.log(url)
       })
+      console.log(helpers.getMessage(name))
 
       const options = [
         'Mark as ignored',
@@ -56,8 +62,8 @@ module.exports = (screenName) => {
     } else {
       console.log('Fetching new followers ...')
       try {
-        const { users, nextCursor } = await twitter.getFollowers(screenName, state.cursor)
-        updateState({ users: helpers.cookTwitterUsers(users), nextCursor })
+        const { users, nextCursor } = await twitter.getFollowers(screenName, state.nextCursor)
+        updateState({ users: helpers.cookTwitterUsers(users, [...state.messaged, ...state.ignored]), nextCursor })
         return flow()
       } catch (err) {
         console.log('Fail to fetch followers: ', err.message)

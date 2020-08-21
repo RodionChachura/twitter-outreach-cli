@@ -1,7 +1,17 @@
+const getFirstName = name => {
+  const [firstName] = name.split(' ')
+  return firstName.charAt(0).toUpperCase() + firstName.slice(1)
+}
+
 module.exports = {
-  cookTwitterUsers: (users) => {
-    const filteredUsers = users.filter(({ name, entities }) => {
-      const withFullName = name.split(' ').length > 1
+  cookTwitterUsers: (users, visitedUsersIds) => {
+    console.log(users)
+    const filteredUsers = users.filter(({ id, name, entities, profile_image_url }) => {
+      if (!profile_image_url || visitedUsersIds.includes(id)) {
+        return false
+      }
+
+      const withFullName = name.split(' ').length === 2
       if (withFullName) {
         return true
       }
@@ -19,5 +29,6 @@ module.exports = {
     }))
   },
   getTwitterUrl: (screenName) => `https://twitter.com/${screenName}`,
-  getLinkedInUrl: (name) => `https://www.linkedin.com/search/results/people/?keywords=${encodeURI(name)}&origin=SWITCH_SEARCH_VERTICAL`
+  getLinkedInUrl: (name) => `https://www.linkedin.com/search/results/people/?keywords=${encodeURI(name)}&origin=SWITCH_SEARCH_VERTICAL`,
+  getMessage: (name) => `Hi ${getFirstName(name)}! I'm curious, what are you doing as a successful X to stay organized and focused, with so many responsibilities and opportunities?`
 }
