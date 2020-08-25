@@ -13,12 +13,8 @@ module.exports = {
         name: user.name.replace(emojiRegex(), '')
       }))
       .filter(({ id, name, entities, description, default_profile_image }) => {
-        if (default_profile_image || visitedUsersIds.includes(id)) {
+        if (default_profile_image || visitedUsersIds.includes(id) || name.split(' ').length !== 2) {
           return false
-        }
-        const withFullName = name.split(' ').length === 2
-        if (withFullName) {
-          return true
         }
         return (entities && entities.urls) || description
       })
