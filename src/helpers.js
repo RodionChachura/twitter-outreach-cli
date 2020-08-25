@@ -5,6 +5,10 @@ const getFirstName = name => {
   return firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase()
 }
 
+const IGNORE_LOCATIONS = [
+  "India"
+]
+
 module.exports = {
   cookTwitterUsers: (users, visitedUsersIds) => {
     const filteredUsers = users
@@ -12,8 +16,11 @@ module.exports = {
         ...user,
         name: user.name.replace(emojiRegex(), '')
       }))
-      .filter(({ id, name, entities, description, default_profile_image }) => {
+      .filter(({ id, name, entities, description, default_profile_image, location }) => {
         if (default_profile_image || visitedUsersIds.includes(id) || name.split(' ').length !== 2) {
+          return false
+        }
+        if (IGNORE_LOCATIONS.find(l => location.includes(l))) {
           return false
         }
         return (entities && entities.urls) || description
