@@ -6,7 +6,8 @@ const getFirstName = name => {
 }
 
 const IGNORE_LOCATIONS = [
-  "India"
+  "India",
+  "Delhi"
 ]
 
 module.exports = {
