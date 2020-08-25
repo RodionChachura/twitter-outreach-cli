@@ -1,4 +1,5 @@
 const readlineSync = require('readline-sync')
+const chalk = require('chalk')
 
 const Storage = require('./storage')
 const twitter = require('./twitter')
@@ -23,20 +24,21 @@ module.exports = (screenName) => {
         name,
         description,
         screenName,
+        location,
         urls
       }, ...restUsers] = state.users
-
       const messagedNumber = state.messaged.length - initialMessagedNumber
       console.clear()
       messagedNumber && console.log(`+ ${messagedNumber} messaged`)
-      console.log(name)
+      console.log(chalk.yellow(name))
+      location && console.log(location)
       description && console.log(description)
       console.log(helpers.getTwitterUrl(screenName))
       console.log(helpers.getLinkedInUrl(name))
-      urls.forEach(url => {
-        console.log(url)
-      })
-      console.log(helpers.getMessage(name))
+      urls.forEach(url => console.log(url))
+      console.log()
+      const messages = helpers.getMessages(name)
+      messages.forEach(m => console.log(m))
 
       const options = [
         'Mark as ignored',
